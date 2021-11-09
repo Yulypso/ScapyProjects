@@ -8,13 +8,12 @@ def pcapFilterByIp(inputFile, ip):
     :param ip: ip to filter with
     :return: None
     """
-    pcapReader = PcapReader(inputFile)
-    outputfilename = inputFile.replace('.pcap', '') + "-[filtered-" + ip + "].pcap"
-    pcapWriter = PcapWriter(outputfilename, append=True)
-    for p in pcapReader:
-        if p[IP].dst == ip or p[IP].src == ip:
-            pcapWriter.write(p)
-    print("[+] " + outputfilename)
+    outputFilename = inputFile.replace('.pcap', '') + "-[filtered-" + ip + "].pcap"
+    with PcapReader(inputFile) as pcapReader, PcapWriter(outputFilename, append=True) as pcapWriter:
+        for p in pcapReader:
+            if p[IP].dst == ip or p[IP].src == ip:
+                pcapWriter.write(p)
+    print("[+] " + outputFilename)
 
 
 if __name__ == '__main__':
