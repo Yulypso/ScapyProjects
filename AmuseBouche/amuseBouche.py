@@ -83,12 +83,30 @@ def level5(src, dst, mac, myId):
 
 def level6(src, dst, mac, myId):
     """
+    Consigne: Fragment IP: Envoyer un fragment IP a l'offset 0x48 qui ne soit pas le dernier fragment
+    et dont le contenu soit "XXXX"
+
+    -> L'offset est exprimé en mots de 8 octets et non en octets ! (champs frag)
+    """
+    payload = b"XXXX"
+
+    p = (Ether(dst=mac) /
+         IP(id=myId, src=src, dst=dst, flags='MF', frag=(0x48//0x8)) /
+         payload)
+    print(p.show2())
+    sendp(p)
+
+
+def level7(src, dst, mac, myId):
+    """
     Consigne:
     """
+    payload = b""
+
     p = (Ether(dst=mac) /
-         IP(id=myId, src=src, dst=dst) /
-         UDP(sport=1234, dport=5678) / b"MAGIC")
+         IP(id=myId, src=src, dst=dst))
     print(p.show2())
+    # sendp(p)
 
 
 if __name__ == '__main__':
@@ -103,4 +121,5 @@ if __name__ == '__main__':
     # level3(SRC, DST, MAC, ID)
     # level4("8.8.8.8", DST, MAC, ID)
     # level5(SRC, DST, MAC, ID)
-    level6(SRC, DST, MAC, ID)
+    # level6(SRC, DST, MAC, ID)
+    level7(SRC, DST, MAC, ID)
